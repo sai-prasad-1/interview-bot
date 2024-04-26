@@ -1,6 +1,7 @@
 package io.levantate.interviewbot.controllers;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +22,9 @@ public class PredictionController {
     }
 
     @PostMapping("/text")
-    public PredictResponse predictText(@RequestBody String prompt) {
+    public List<String> predictText(@RequestBody String prompt) {
         try {
-            String prompt1 = "Give me ten interview questions for the role of program manager.";
+            String prompt1 = "Give me ten interview questions for the role project manager.";
             return predictionService.predictTextPrompt(prompt1);
         } catch (IOException e) {
             e.printStackTrace();

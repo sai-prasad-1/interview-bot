@@ -2,27 +2,37 @@ package io.levantate.interviewbot.utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.cloud.aiplatform.v1beta1.EndpointName;
 import com.google.cloud.aiplatform.v1beta1.PredictResponse;
 import com.google.cloud.aiplatform.v1beta1.PredictionServiceClient;
 import com.google.cloud.aiplatform.v1beta1.PredictionServiceSettings;
+import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
 import com.google.protobuf.util.JsonFormat;
 
 public class AIPredictionHelper {
-
-        public static void main(String[] args) throws IOException {
-                // TODO(developer): Replace these variables before running the sample.
-                // Details of designing text prompts for supported large language models:
-                // https://cloud.google.com/vertex-ai/docs/generative-ai/text/text-overview
-                String instance = "Give me ten interview questions for the role of program manager.";
-                predictTextPrompt(instance);
-        }
-
         // Get a text prompt from a supported text model
-        public static PredictResponse predictTextPrompt(
+        public static List<String> extractQuestions(PredictResponse predictResponse) {
+                List<String> questions = new ArrayList<>();
+                Value content = predictResponse.getPredictions(0).getStructValue().getFieldsOrThrow("content");
+                String contentString = content.getStringValue();
+                System.out.println(contentString);
+                if (contentString != null && !contentString.isEmpty()) {
+                    // Split the content string into individual questions
+                    String[] questionArray = contentString.split("\\n");
+                    for (String question : questionArray) {
+                        // Remove leading digits and period
+                        String cleanedQuestion = question.replaceFirst("^\\d+\\.\\s*", "");
+                        questions.add(cleanedQuestion);
+                    }
+                }
+                return questions;
+            }
+        public static List<String> predictTextPrompt(
                         String prompt
                        )
                         throws IOException {
@@ -68,8 +78,9 @@ public class AIPredictionHelper {
                         PredictResponse predictResponse = predictionServiceClient.predict(endpointName, instances,
                                         parameterValue);
                         System.out.println("Predict Response");
-                        System.out.println(predictResponse.getPredictions(0));
-                        return predictResponse;
+                        List<String> convertedQuestions=  extractQuestions(predictResponse);
+                        System.out.println(convertedQuestions);
+                        return convertedQuestions;
                 }
         }
 
