@@ -4,10 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.levantate.interviewbot.DTO.User.RegisterDTO;
 import io.levantate.interviewbot.models.User;
 import io.levantate.interviewbot.service.UserService;
 
-@RestController
+@RestController("/auth")
 public class UserController {
 
     @Autowired
@@ -16,7 +17,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<Object> submitRegisterForm(@RequestBody User user) {
         try {
-            User registeredUser = userService.registerUser(user);
+            String registeredUser = userService.registerUser(user);
             return ResponseEntity.ok(registeredUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to register user: " + e.getMessage());
@@ -26,7 +27,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Object> submitLoginForm(@RequestBody User user) {
         try {
-            boolean registeredUser = userService.login(user.getUsername(),user.getPassword());
+            String registeredUser = userService.login(user.getUsername(),user.getPassword());
             return ResponseEntity.ok(registeredUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to Login user: " + e.getMessage());

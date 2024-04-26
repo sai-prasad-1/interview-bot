@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import io.levantate.interviewbot.DTO.GeneratedQuestionsDTO;
 import io.levantate.interviewbot.DTO.GetQuestionsDTO;
 import io.levantate.interviewbot.service.QuestionsService;
+import io.levantate.interviewbot.utils.JwtTokenUtil;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 public class QuestionsContoller {
@@ -16,9 +18,15 @@ public class QuestionsContoller {
     @Autowired
     private QuestionsService questionsService;
 
+    @Autowired
+    private JwtTokenUtil jwtTokenProvider;
+
+
     @PostMapping("/questions")
-    public ResponseEntity<Object> submitRegisterForm(@RequestBody GetQuestionsDTO questions) {
+    public ResponseEntity<Object> submitRegisterForm(@RequestBody GetQuestionsDTO questions, HttpServletRequest request) {
+        
         try {
+            String userId = jwtTokenProvider.getUserIdFromJwt(request);
             List<String> generatedQuestions = questionsService.genarateQuestions(questions);
             GeneratedQuestionsDTO responseDTO = new GeneratedQuestionsDTO(generatedQuestions);
             return ResponseEntity.ok(responseDTO);
