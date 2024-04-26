@@ -64,8 +64,10 @@
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-aiplatform</artifactId>
 			<version>3.35.0</version>
-		  </dependency>
-		  
+		</dependency>
+		
+		
+		
 	</dependencies>
 
 	<build>

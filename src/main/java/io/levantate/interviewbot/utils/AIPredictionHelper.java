@@ -1,10 +1,12 @@
 package io.levantate.interviewbot.utils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.aiplatform.v1beta1.EndpointName;
 import com.google.cloud.aiplatform.v1beta1.PredictResponse;
 import com.google.cloud.aiplatform.v1beta1.PredictionServiceClient;
@@ -49,6 +51,10 @@ public class AIPredictionHelper {
                                 String publisher = "google";
                                 String model = "text-bison@001";
                 String endpoint = String.format("%s-aiplatform.googleapis.com:443", location);
+                 // Load credentials from the credentials file
+       
+        
+
                 PredictionServiceSettings predictionServiceSettings = PredictionServiceSettings.newBuilder()
                                 .setEndpoint(endpoint).build();
 
