@@ -34,7 +34,16 @@ public class AIPredictionHelper {
                 }
                 return questions;
             }
-        public static List<String> predictTextPrompt(
+        
+        public static int extractScore(PredictResponse predictResponse) {
+                Value content = predictResponse.getPredictions(0).getStructValue().getFieldsOrThrow("content");
+                String contentString = content.getStringValue();
+                // convert to int
+                Integer score = Integer.parseInt(contentString);
+                return score;
+        }
+
+        public static PredictResponse predictTextPrompt(
                         String prompt
                        )
                         throws IOException {
@@ -86,7 +95,7 @@ public class AIPredictionHelper {
                         System.out.println("Predict Response");
                         List<String> convertedQuestions=  extractQuestions(predictResponse);
                         System.out.println(convertedQuestions);
-                        return convertedQuestions;
+                        return predictResponse;
                 }
         }
 

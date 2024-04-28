@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.google.cloud.aiplatform.v1beta1.PredictResponse;
+
 import io.levantate.interviewbot.DTO.GetQuestionsDTO;
 import io.levantate.interviewbot.utils.AIPredictionHelper;
 
@@ -19,9 +21,10 @@ public class QuestionsService {
 
 
 
-        List<String> questions = AIPredictionHelper.predictTextPrompt(prompt);
+         PredictResponse questions = AIPredictionHelper.predictTextPrompt(prompt);
+         List<String> questionsList = AIPredictionHelper.extractQuestions(questions);
 
-        return questions;
+        return questionsList;
         
     }
     
