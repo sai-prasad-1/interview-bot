@@ -14,6 +14,4 @@ public class GeneratedQuestionsDTO {
         this.questions = questions;
     }
 
-    
-    
 }

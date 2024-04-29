@@ -16,6 +16,7 @@ import io.levantate.interviewbot.models.Question;
 import io.levantate.interviewbot.models.User;
 import io.levantate.interviewbot.repository.InterviewRepository;
 import io.levantate.interviewbot.repository.QuestionRepository;
+import io.levantate.interviewbot.repository.UserRepository;
 import io.levantate.interviewbot.utils.AIPredictionHelper;
 
 @Service
@@ -29,6 +30,9 @@ public class InterviewService {
 
     @Autowired
     private InterviewRepository interviewRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public Interview createInterview(CreateInterviewDTO parameters) throws IOException {
         User user = userService.findById(parameters.getUserId());
@@ -95,4 +99,13 @@ public class InterviewService {
     public Interview getInterview(Long interviewId) {
         return interviewRepository.findById(interviewId).get();
     }
+
+    public Iterable<Interview> getInterviewsForUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            return interviewRepository.findByUser(user.get());
+            }
+            throw new IllegalArgumentException("User not found");
+            }
+
 }
